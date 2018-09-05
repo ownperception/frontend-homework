@@ -48,4 +48,29 @@ QUnit.module('Тестируем функцию get', function () {
 		assert.strictEqual(get(object, '.baz.length'), undefined);
 		assert.strictEqual(get(object, '.0.1.2'), undefined);
 	});
+	
+	QUnit.test('get работает правильно c методами объектов', function (assert) {
+		const object = {
+		    arr: [1, 2, 3, 4, 5],
+		    sum: {
+			sum: function (arr) { return arr.reduce(function (sum, cur) { return sum + cur; }) }
+		    }
+		};
+
+		assert.strictEqual(get(object, '.sum'), object.sum);
+		assert.strictEqual(get(object, '.sum.length'), undefined);
+		assert.strictEqual(get(object, '.arr.length'), object.arr.length);
+	    });
+
+    QUnit.test('get работает правильно c неопределенными свойстами', function (assert) {
+        const object = {
+            foo: {
+                bar: 42
+            }
+        };
+
+        assert.strictEqual(get(object, ''), object);
+        assert.strictEqual(get(object, null), undefined);
+        assert.strictEqual(get(object, undefined), undefined);
+    });	
 });
